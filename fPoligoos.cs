@@ -97,7 +97,7 @@ namespace Poligonos
                         ponto_aux = new Point(int.Parse(tbPFx.Text), int.Parse(tbPFy.Text));
 
                     if (rbEixo.Checked || rbPonto.Checked)
-                        p.Translacao(ponto_aux.X, ponto_aux.Y);
+                        p.Translacao(p.Centro().X, p.Centro().Y);
 
                     if (select.Equals("Escala"))
                         p.Escala(x, y);
@@ -150,7 +150,7 @@ namespace Poligonos
             gbTrans.Enabled = tbX.Visible = tbY.Visible = false;
             cbTransf.SelectedIndex = down.X = -1;
             pbMain.Image = image;
-            rbPonto.Checked = true;
+            rbEixo.Checked = true;
             tbPFx.Clear(); tbPFy.Clear();
         }
 
