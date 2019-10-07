@@ -17,12 +17,12 @@ namespace Poligonos
         public fPoligoos()
         {
             InitializeComponent();
-            image = new Bitmap(pbMain.Width, pbMain.Height);
+            image = new Bitmap(pbMain.Width, pbMain.Height);            
             down.X = -1;
-            limpaImagem();
+            LimpaImagem();
         }
 
-        private void limpaImagem()
+        private void LimpaImagem()
         {
             for (int i = 0; i < image.Width; i++)
                 for (int j = 0; j < image.Height; j++)
@@ -43,7 +43,7 @@ namespace Poligonos
             if(lvPolig.SelectedIndex > -1)
             {
                 p = (Poligono)lvPolig.Items[lvPolig.SelectedIndex];
-                p.draw(Color.Red, image);
+                p.Draw(Color.Red, image);
 
                 DataTable dt = new DataTable();
                 dt.Columns.Add("X");
@@ -65,67 +65,73 @@ namespace Poligonos
 
         private void BtTransformar_Click(object sender, EventArgs e)
         {
-            p.draw(white, image);
+            p.Draw(white, image);
             string select = cbTransf.Text;
             double x = tbX.Text.Equals("") ? 0 : double.Parse(tbX.Text), y = tbY.Text.Equals("") ? 0 : double.Parse(tbY.Text);
-            Point ponto_aux;
+            Point ponto_aux = new Point();
             if(select.Equals("ScanLine"))
             {
                 cdCor.ShowDialog();
-                p.scanLine(image, cdCor.Color);
+                p.ScanLine(image, cdCor.Color);
             }
             else
                 if (select.Equals("Translação"))
-                    p.translacao(x, y);
+                    p.Translacao(x, y);
+                else if (select.Equals("Rotação"))
+                {
+                    if (rbEixo.Checked)
+                        ponto_aux = p.Centro();
+                    else if (rbPonto.Checked)
+                        ponto_aux = new Point(int.Parse(tbPFx.Text), int.Parse(tbPFy.Text));
+                    if (rbEixo.Checked || rbPonto.Checked)
+                        p.Translacao(ponto_aux.X, ponto_aux.Y);
+                    p.Rotacao(x * Math.PI / 180.0);
+                    if (rbEixo.Checked || rbPonto.Checked)
+                        p.Translacao(-ponto_aux.X, -ponto_aux.Y);
+                }
                 else
                 {
-                    if (rbPonto.Checked)
-                        Console.WriteLine("Verdade");
-                    else
-                        Console.WriteLine("Mintira");
-                    
-                    if (!rbPonto.Checked)
-                        ponto_aux = p.centro();
-                    else
+                    if (rbEixo.Checked)
+                        ponto_aux = p.CentroAtual();
+                    else if(rbPonto.Checked)
                         ponto_aux = new Point(int.Parse(tbPFx.Text), int.Parse(tbPFy.Text));
 
                     if (rbEixo.Checked || rbPonto.Checked)
-                        p.translacao(ponto_aux.X, ponto_aux.Y);
+                        p.Translacao(ponto_aux.X, ponto_aux.Y);
 
                     if (select.Equals("Escala"))
-                        p.escala(x, y);
-                    else if (select.Equals("Rotação")) // Corrigir
-                        p.rotacao(x / Math.PI);
+                        p.Escala(x, y);
                     else if (select.Equals("Cisalhamento"))
-                        p.cisalhamento(x, y);
-                    else if (select.Equals("Espelhamento")) // Corrigir
-                        p.espelhamento(x, y);
+                        p.Cisalhamento(x, y);
+                    else if (select.Equals("Espelhamento"))
+                        p.Espelhamento(x, y);
 
                     if (rbEixo.Checked || rbPonto.Checked)
-                        p.translacao(-ponto_aux.X, -ponto_aux.Y);
+                        p.Translacao(-ponto_aux.X, -ponto_aux.Y);
                 }
 
-            p.draw(Color.Black, image);
+            p.Draw(Color.Black, image);
             pbMain.Image = image;
         }
 
         private void PictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
 
-            if (flag.Equals("Bal"))
-            {
-                floodFill(e.Location, cdCor.Color);
-                pbMain.Image = image;
-            }
-            else
-            {
-                if (down.X == -1)
-                    p = new Poligono();
+            if(!flag.Equals(""))
+                if (flag.Equals("Bal"))
+                {
+                    FloodFill(e.Location, cdCor.Color);
+                    pbMain.Image = image;
+                }
+                else
+                {
+                    if (down.X == -1)
+                        p = new Poligono();
 
-                down = liv = e.Location;
-                if (flag.Equals("Pol") && down.X != -1)
-                    p.addPonto(down);
-            }
+                    down = liv = e.Location;
+                    if (flag.Equals("Pol") && down.X != -1)
+                        p.AddPonto(down);
+                }
         }
 
         private void RbPonto_CheckedChanged(object sender, EventArgs e)
@@ -140,11 +146,12 @@ namespace Poligonos
             lvPolig.Items.Clear();
             dataGridView1.DataSource = null;
             dataGridView1.Rows.Clear();
-            limpaImagem();
-            gbTrans.Enabled = false;
-            cbTransf.SelectedIndex = -1;
-            tbX.Visible = tbY.Visible = false;
+            LimpaImagem();
+            gbTrans.Enabled = tbX.Visible = tbY.Visible = false;
+            cbTransf.SelectedIndex = down.X = -1;
             pbMain.Image = image;
+            rbPonto.Checked = true;
+            tbPFx.Clear(); tbPFy.Clear();
         }
 
         private void BtBal_MouseHover(object sender, EventArgs e)
@@ -203,17 +210,18 @@ namespace Poligonos
         private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             List<Point> l = new List<Point>();
+            
             if(down.X != -1)
             {
                 if (flag.Equals("Ret"))
                 {
-                    p.draw(white, image);
+                    p.Draw(white, image);
                     l.Add(new Point(Math.Min(e.X, down.X), Math.Min(e.Y, down.Y)));                    
                     l.Add(new Point(Math.Abs(down.X - e.X) + Math.Min(e.X, down.X), Math.Min(e.Y, down.Y)));
                     l.Add(new Point(Math.Max(e.X, down.X), Math.Max(e.Y, down.Y)));
                     l.Add(new Point(Math.Min(e.X, down.X), Math.Abs(down.Y - e.Y) + Math.Min(e.Y, down.Y)));
                     p = new Poligono(l, 'R');
-                    p.draw(color, image);
+                    p.Draw(color, image);
                 }
                 else if (flag.Equals("Circ"))
                 {
@@ -249,10 +257,9 @@ namespace Poligonos
             lbY.Text = e.Y + "";
         }
 
-        private void floodFill(Point p, Color c)
+        private void FloodFill(Point p, Color c)
         {
             Stack<Point> stack = new Stack<Point>();
-            Color aux;
             stack.Push(p);
             while(stack.Count > 0)
             {
@@ -300,10 +307,10 @@ namespace Poligonos
                         
                         old.X = 0;
                         down.X = -1;
-                        pbMain.Image = image;
                     }
                     else
                         down = e.Location;
+            pbMain.Image = image;
         }
     }
 }

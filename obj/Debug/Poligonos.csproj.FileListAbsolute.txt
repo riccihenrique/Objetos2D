@@ -22,3 +22,15 @@ E:\Poligonos\obj\Debug\Poligonos.fInfos.resources
 E:\Poligonos\obj\Debug\Poligonos.ViewPort.resources
 F:\Poligonos\obj\Debug\Poligonos.fInfos.resources
 F:\Poligonos\obj\Debug\Poligonos.ViewPort.resources
+D:\Documentos\GitHub\Poligonos\bin\Debug\Poligonos.exe.config
+D:\Documentos\GitHub\Poligonos\bin\Debug\Poligonos.exe
+D:\Documentos\GitHub\Poligonos\bin\Debug\Poligonos.pdb
+D:\Documentos\GitHub\Poligonos\obj\Debug\Poligonos.csprojAssemblyReference.cache
+D:\Documentos\GitHub\Poligonos\obj\Debug\Poligonos.fInfos.resources
+D:\Documentos\GitHub\Poligonos\obj\Debug\Poligonos.fPoligoos.resources
+D:\Documentos\GitHub\Poligonos\obj\Debug\Poligonos.Properties.Resources.resources
+D:\Documentos\GitHub\Poligonos\obj\Debug\Poligonos.ViewPort.resources
+D:\Documentos\GitHub\Poligonos\obj\Debug\Poligonos.csproj.GenerateResource.cache
+D:\Documentos\GitHub\Poligonos\obj\Debug\Poligonos.csproj.CoreCompileInputs.cache
+D:\Documentos\GitHub\Poligonos\obj\Debug\Poligonos.exe
+D:\Documentos\GitHub\Poligonos\obj\Debug\Poligonos.pdb

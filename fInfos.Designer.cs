@@ -41,7 +41,7 @@
             this.tbW.Name = "tbW";
             this.tbW.Size = new System.Drawing.Size(100, 20);
             this.tbW.TabIndex = 0;
-            this.tbW.Text = "100";
+            this.tbW.Text = "500";
             // 
             // tbH
             // 
@@ -49,7 +49,7 @@
             this.tbH.Name = "tbH";
             this.tbH.Size = new System.Drawing.Size(100, 20);
             this.tbH.TabIndex = 1;
-            this.tbH.Text = "100";
+            this.tbH.Text = "500";
             // 
             // button1
             // 

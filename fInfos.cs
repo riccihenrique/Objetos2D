@@ -14,7 +14,7 @@ namespace Poligonos
         
         public void SetPoligono(Object p)
         {
-            this.p = (Poligono) p;
+            this.p = new Poligono((Poligono)p);
         }
 
         private void Button1_Click(object sender, EventArgs e)
